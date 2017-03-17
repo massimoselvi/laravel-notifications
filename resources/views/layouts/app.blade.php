@@ -15,10 +15,29 @@
 
     <!-- Scripts -->
     <script>
-        window.Laravel = <?php echo json_encode([
-            'csrfToken' => csrf_token(),
-        ]); ?>
+        window.Laravel = {!!json_encode(['csrfToken' => csrf_token()]) !!}
     </script>
+
+    <!-- Pusher.com -->
+    <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
+
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('a07267aed62d4fdbad43', {
+          cluster: 'eu',
+          encrypted: true
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+          alert(data.message);
+        });
+    </script>
+    <!-- /Pusher.com -->
+
+
 </head>
 <body>
     <div id="app">
@@ -36,7 +55,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name', 'Laravel') }} @if(Auth::check())- {{ Auth::user()->name }} @endif
                     </a>
                 </div>
 
@@ -83,5 +102,16 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+
+    <script>
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+        });
+    </script>
+
+    @stack('scripts')
+
 </body>
 </html>

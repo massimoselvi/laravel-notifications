@@ -167,7 +167,7 @@ return [
 		 * Package Service Providers...
 		 */
 
-		//
+		Jenssegers\Rollbar\RollbarServiceProvider::class,
 
 		/*
 		 * Application Service Providers...
